@@ -1,0 +1,3 @@
+[submodule "PaperFold"]
+	path = PaperFold
+	url = https://github.com/honcheng/PaperFold-for-iOS.git

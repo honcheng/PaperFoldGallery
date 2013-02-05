@@ -10,6 +10,7 @@
 
 @interface HCPaperFoldGalleryView()
 @property (nonatomic, weak) UIScrollView *scrollView;
+@property (nonatomic, weak) MultiFoldView *centerFoldView;
 @property (nonatomic, weak) MultiFoldView *rightFoldView;
 @property (nonatomic, weak) UIView *contentView;
 @property (nonatomic, strong) NSTimer *animationTimer;
@@ -22,6 +23,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         
+        self.backgroundColor = [UIColor blackColor];
+        
         UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
         scrollView.pagingEnabled = YES;
         scrollView.delegate = self;
@@ -33,6 +36,13 @@
         contentView.userInteractionEnabled = NO;
         [self.scrollView addSubview:contentView];
         self.contentView = contentView;
+        
+        MultiFoldView *centerFoldView = [[MultiFoldView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height) foldDirection:FoldDirectionHorizontalRightToLeft folds:folds pullFactor:0.9];
+        self.centerFoldView = centerFoldView;
+        self.centerFoldView.delegate = self;
+        self.centerFoldView.userInteractionEnabled = NO;
+        [self.contentView addSubview:self.centerFoldView];
+        
 
         MultiFoldView *rightFoldView = [[MultiFoldView alloc] initWithFrame:CGRectMake(frame.size.width, 0, frame.size.width, frame.size.height) foldDirection:FoldDirectionHorizontalRightToLeft folds:folds pullFactor:0.9];
         self.rightFoldView = rightFoldView;
@@ -50,15 +60,29 @@
     CGSize contentSize = CGSizeMake(self.frame.size.width*numberOfPages, self.frame.size.height);
     [self.scrollView setContentSize:contentSize];
     
-    UIView *rightPageContentView = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber];
+    UIView *centerPageContentView = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber];
+    [self.centerFoldView setContent:centerPageContentView];
+    [self.centerFoldView unfoldWithParentOffset:-self.frame.size.width];
+    
+    UIView *rightPageContentView = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
     [self.rightFoldView setContent:rightPageContentView];
 }
 
 - (float)displacementOfMultiFoldView:(id)multiFoldView
 {
-    CGPoint offset = self.scrollView.contentOffset;
-    float x_offset = -1*(offset.x - self.scrollView.frame.size.width*self.pageNumber);
-    return x_offset;
+    if (multiFoldView==self.rightFoldView)
+    {
+        CGPoint offset = self.scrollView.contentOffset;
+        float x_offset = -1*(offset.x - self.scrollView.frame.size.width*self.pageNumber);
+        return x_offset;
+    }
+    else if (multiFoldView==self.centerFoldView)
+    {
+        CGPoint offset = self.scrollView.contentOffset;
+        float x_offset = -1*(offset.x + self.scrollView.frame.size.width*(1-self.pageNumber));
+        return x_offset;
+    }
+    else return 0;
 }
 
 #pragma mark scroll view delegate
@@ -68,6 +92,10 @@
     CGPoint offset = scrollView.contentOffset;
     float x_offset = -1*(offset.x - scrollView.frame.size.width*self.pageNumber);
     [self.rightFoldView unfoldWithParentOffset:x_offset];
+    
+    float x_offset2 = -1*(offset.x + self.scrollView.frame.size.width*(1-self.pageNumber));
+    [self.centerFoldView unfoldWithParentOffset:x_offset2];
+ 
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -77,6 +105,8 @@
     CGRect contentViewFrame = [self.contentView frame];
     contentViewFrame.origin.x = scrollView.frame.size.width*self.pageNumber;
     [self.contentView setFrame:contentViewFrame];
+    
+    [self.centerFoldView unfoldWithParentOffset:-self.frame.size.width];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView

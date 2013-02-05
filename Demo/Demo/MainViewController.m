@@ -49,7 +49,7 @@
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [self.view bounds].size.width, [self.view bounds].size.height)];
     if (pageNumber==0) [view setBackgroundColor:[UIColor redColor]];
     else if (pageNumber==1) [view setBackgroundColor:[UIColor blueColor]];
-    else [view setBackgroundColor:[UIColor grayColor]];
+    else [view setBackgroundColor:[UIColor lightGrayColor]];
     
     return view;
 }

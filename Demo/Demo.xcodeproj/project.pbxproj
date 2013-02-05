@@ -36,6 +36,9 @@
 		F8BCEAE116BFBCC2007D52B0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8BCEAE016BFBCC2007D52B0 /* QuartzCore.framework */; };
 		F8BCEAE416BFBCE3007D52B0 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8BCEAE316BFBCE3007D52B0 /* MainViewController.m */; };
 		F8BCEAE716BFBD2A007D52B0 /* HCPaperFoldGalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8BCEAE616BFBD2A007D52B0 /* HCPaperFoldGalleryView.m */; };
+		F8BDEA9116C0C30200163AD5 /* HCPaperFoldGalleyMultiFoldView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8BDEA9016C0C30200163AD5 /* HCPaperFoldGalleyMultiFoldView.m */; };
+		F8BDEA9416C0DEA500163AD5 /* DemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8BDEA9316C0DEA500163AD5 /* DemoCell.m */; };
+		F8BDEA9716C0DEC600163AD5 /* HCPaperFoldGalleryCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8BDEA9616C0DEC600163AD5 /* HCPaperFoldGalleryCellView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +99,12 @@
 		F8BCEAE516BFBD2A007D52B0 /* HCPaperFoldGalleryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HCPaperFoldGalleryView.h; path = ../PaperFoldGallery/HCPaperFoldGalleryView.h; sourceTree = "<group>"; };
 		F8BCEAE616BFBD2A007D52B0 /* HCPaperFoldGalleryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HCPaperFoldGalleryView.m; path = ../PaperFoldGallery/HCPaperFoldGalleryView.m; sourceTree = "<group>"; };
 		F8BCEAE816BFBD8D007D52B0 /* HCPaperFoldGalleryViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HCPaperFoldGalleryViewDelegate.h; path = ../PaperFoldGallery/HCPaperFoldGalleryViewDelegate.h; sourceTree = "<group>"; };
+		F8BDEA8F16C0C30200163AD5 /* HCPaperFoldGalleyMultiFoldView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HCPaperFoldGalleyMultiFoldView.h; path = ../PaperFoldGallery/HCPaperFoldGalleyMultiFoldView.h; sourceTree = "<group>"; };
+		F8BDEA9016C0C30200163AD5 /* HCPaperFoldGalleyMultiFoldView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HCPaperFoldGalleyMultiFoldView.m; path = ../PaperFoldGallery/HCPaperFoldGalleyMultiFoldView.m; sourceTree = "<group>"; };
+		F8BDEA9216C0DEA500163AD5 /* DemoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoCell.h; sourceTree = "<group>"; };
+		F8BDEA9316C0DEA500163AD5 /* DemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoCell.m; sourceTree = "<group>"; };
+		F8BDEA9516C0DEC600163AD5 /* HCPaperFoldGalleryCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HCPaperFoldGalleryCellView.h; path = ../PaperFoldGallery/HCPaperFoldGalleryCellView.h; sourceTree = "<group>"; };
+		F8BDEA9616C0DEC600163AD5 /* HCPaperFoldGalleryCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HCPaperFoldGalleryCellView.m; path = ../PaperFoldGallery/HCPaperFoldGalleryCellView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +169,8 @@
 			children = (
 				F8BCEA9516BFBC69007D52B0 /* AppDelegate.h */,
 				F8BCEA9616BFBC69007D52B0 /* AppDelegate.m */,
+				F8BDEA9216C0DEA500163AD5 /* DemoCell.h */,
+				F8BDEA9316C0DEA500163AD5 /* DemoCell.m */,
 				F8BCEAE216BFBCE3007D52B0 /* MainViewController.h */,
 				F8BCEAE316BFBCE3007D52B0 /* MainViewController.m */,
 				F8BCEA8D16BFBC69007D52B0 /* Supporting Files */,
@@ -244,6 +255,10 @@
 				F8BCEABB16BFBC9E007D52B0 /* PaperFold */,
 				F8BCEAE516BFBD2A007D52B0 /* HCPaperFoldGalleryView.h */,
 				F8BCEAE616BFBD2A007D52B0 /* HCPaperFoldGalleryView.m */,
+				F8BDEA9516C0DEC600163AD5 /* HCPaperFoldGalleryCellView.h */,
+				F8BDEA9616C0DEC600163AD5 /* HCPaperFoldGalleryCellView.m */,
+				F8BDEA8F16C0C30200163AD5 /* HCPaperFoldGalleyMultiFoldView.h */,
+				F8BDEA9016C0C30200163AD5 /* HCPaperFoldGalleyMultiFoldView.m */,
 				F8BCEAE816BFBD8D007D52B0 /* HCPaperFoldGalleryViewDelegate.h */,
 			);
 			name = PaperFoldGallery;
@@ -374,6 +389,9 @@
 				F8BCEADE16BFBC9E007D52B0 /* UIView+Screenshot.m in Sources */,
 				F8BCEAE416BFBCE3007D52B0 /* MainViewController.m in Sources */,
 				F8BCEAE716BFBD2A007D52B0 /* HCPaperFoldGalleryView.m in Sources */,
+				F8BDEA9116C0C30200163AD5 /* HCPaperFoldGalleyMultiFoldView.m in Sources */,
+				F8BDEA9416C0DEA500163AD5 /* DemoCell.m in Sources */,
+				F8BDEA9716C0DEC600163AD5 /* HCPaperFoldGalleryCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -548,6 +566,7 @@
 				F8BCEAB716BFBC69007D52B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F8BCEAB816BFBC69007D52B0 /* Build configuration list for PBXNativeTarget "DemoTests" */ = {
 			isa = XCConfigurationList;
@@ -556,6 +575,7 @@
 				F8BCEABA16BFBC69007D52B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

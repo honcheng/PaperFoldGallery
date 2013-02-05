@@ -7,6 +7,7 @@
 //
 
 #import "MainViewController.h"
+#import "DemoCell.h"
 
 @interface MainViewController ()
 @end
@@ -44,21 +45,25 @@
 
 #pragma mark PaperFoldGallery delegate
 
-- (UIView*)paperFoldGalleryView:(HCPaperFoldGalleryView*)galleryView viewAtPageNumber:(int)pageNumber
+- (HCPaperFoldGalleryCellView*)paperFoldGalleryView:(HCPaperFoldGalleryView*)galleryView viewAtPageNumber:(int)pageNumber
 {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [self.view bounds].size.width, [self.view bounds].size.height)];
-    if (pageNumber==0) [view setBackgroundColor:[UIColor redColor]];
-    else if (pageNumber==1) [view setBackgroundColor:[UIColor blueColor]];
-    else [view setBackgroundColor:[UIColor lightGrayColor]];
+    static NSString *identifier = @"identifier";
+    DemoCell *cell = (DemoCell*)[self.galleryView dequeueReusableCellWithIdentifier:identifier];
+    if (!cell)
+    {
+        cell = [[DemoCell alloc] initWithIdentifier:identifier];
+    }
     
-    return view;
+    [cell.titleLabel setText:[NSString stringWithFormat:@"%i", pageNumber+1]];
+    
+    return cell;
 }
 
 #pragma mark PaperFoldGallery datasource
 
 - (NSInteger)numbeOfItemsInPaperFoldGalleryView:(HCPaperFoldGalleryView*)galleryView
 {
-    return 10;
+    return 20;
 }
 
 @end

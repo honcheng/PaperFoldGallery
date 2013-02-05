@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HCPaperFoldGalleyMultiFoldView.h"
 @class HCPaperFoldGalleryView;
+@class HCPaperFoldGalleryCellView;
+@class HCPaperFoldGalleyMultiFoldView;
 
 @protocol HCPaperFoldGalleryViewDelegate <NSObject>
-- (UIView*)paperFoldGalleryView:(HCPaperFoldGalleryView*)galleryView viewAtPageNumber:(int)pageNumber;
+- (HCPaperFoldGalleryCellView*)paperFoldGalleryView:(HCPaperFoldGalleryView*)galleryView viewAtPageNumber:(int)pageNumber;
 @end
 
 @protocol HCPaperFoldGalleryViewDatasource <NSObject>

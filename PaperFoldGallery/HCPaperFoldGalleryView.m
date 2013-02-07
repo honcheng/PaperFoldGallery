@@ -15,6 +15,7 @@
 @property (nonatomic, weak) UIView *contentView;
 @property (nonatomic, strong) NSTimer *animationTimer;
 @property (nonatomic, strong) NSMutableSet *recycledPages, *visiblePages;
+@property (nonatomic, strong) NSMutableArray *cachedImages;
 - (void)tilePages;
 @end
 
@@ -179,6 +180,7 @@
     if (foldView==self.centerFoldView)
     {
         HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber];
+        [page setTag:TAG_PAGE+self.pageNumber];
         int x = self.frame.size.width*self.pageNumber;
         CGRect pageFrame = CGRectMake(x,0,self.scrollView.frame.size.width,self.scrollView.frame.size.height);
         [page setFrame:pageFrame];
@@ -187,12 +189,56 @@
     else if (foldView==self.rightFoldView)
     {
         HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
+        [page setTag:TAG_PAGE+self.pageNumber+1];
         int x = self.frame.size.width*(self.pageNumber+1);
         CGRect pageFrame = CGRectMake(x,0,self.scrollView.frame.size.width,self.scrollView.frame.size.height);
         [page setFrame:pageFrame];
         return page;
     }
     else return nil;
+}
+
+- (UIImage*)imageForMultiFoldView:(HCPaperFoldGalleyMultiFoldView*)foldView
+{
+    if (self.useCacheImages)
+    {
+        if (foldView==self.centerFoldView)
+        {
+            if (self.pageNumber<[self.cachedImages count])
+            {
+                return self.cachedImages[self.pageNumber];
+            }
+            else return nil;
+        }
+        else if (foldView==self.rightFoldView)
+        {
+            if (self.pageNumber+1<[self.cachedImages count])
+            {
+                return self.cachedImages[self.pageNumber+1];
+            }
+            else return nil;
+        }
+        else return nil;
+    }
+    else return nil;
+}
+
+- (void)multiFoldView:(HCPaperFoldGalleyMultiFoldView*)foldView  cell:(HCPaperFoldGalleryCellView *)cell didGeneratedScreenshot:(UIImage *)screenshot 
+{
+    if (!_cachedImages) _cachedImages = [NSMutableArray array];
+    
+    int pageNumber = [cell tag] - TAG_PAGE;
+    if (pageNumber<[self.cachedImages count])
+    {
+        self.cachedImages[pageNumber] = screenshot;
+    }
+    else
+    {
+        if (pageNumber==[self.cachedImages count])
+        {
+            [self.cachedImages addObject:screenshot];
+        }
+    }
 }
 
 #pragma mark scroll view delegate

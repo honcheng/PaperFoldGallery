@@ -15,6 +15,7 @@
 @property (nonatomic, weak) id<HCPaperFoldGalleryViewDelegate> delegate;
 @property (nonatomic, weak) id<HCPaperFoldGalleryViewDatasource> datasource;
 @property (nonatomic, assign) int pageNumber;
+@property (nonatomic, assign) BOOL useCacheImages;
 - (id)initWithFrame:(CGRect)frame folds:(int)folds;
 - (void)reloadData;
 - (HCPaperFoldGalleryCellView*)dequeueReusableCellWithIdentifier:(NSString*)identifier;

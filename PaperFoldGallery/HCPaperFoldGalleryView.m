@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSTimer *animationTimer;
 @property (nonatomic, strong) NSMutableSet *recycledPages, *visiblePages;
 @property (nonatomic, strong) NSMutableArray *cachedImages;
+@property (nonatomic, copy) void (^scrollCompletion)();
 - (void)tilePages;
 @end
 
@@ -34,6 +35,7 @@
         UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
         scrollView.pagingEnabled = YES;
         scrollView.delegate = self;
+        scrollView.scrollsToTop = NO;
         [self addSubview:scrollView];
         self.scrollView = scrollView;
         
@@ -200,27 +202,42 @@
 
 - (UIImage*)imageForMultiFoldView:(HCPaperFoldGalleyMultiFoldView*)foldView
 {
-    if (self.useCacheImages)
+    UIImage *image = nil;
+    if ([self.datasource respondsToSelector:@selector(paperFoldGalleryView:imageAtPageNumber:)])
     {
         if (foldView==self.centerFoldView)
-        {
-            if (self.pageNumber<[self.cachedImages count])
-            {
-                return self.cachedImages[self.pageNumber];
-            }
-            else return nil;
-        }
+            image = [self.datasource paperFoldGalleryView:self imageAtPageNumber:self.pageNumber];
         else if (foldView==self.rightFoldView)
+            image = [self.datasource paperFoldGalleryView:self imageAtPageNumber:self.pageNumber+1];
+    }
+    
+    if (image) return image;
+    else
+    {
+        if (self.useCacheImages)
         {
-            if (self.pageNumber+1<[self.cachedImages count])
+            if (foldView==self.centerFoldView)
             {
-                return self.cachedImages[self.pageNumber+1];
+                if (self.pageNumber<[self.cachedImages count])
+                {
+                    return self.cachedImages[self.pageNumber];
+                }
+                else return nil;
+            }
+            else if (foldView==self.rightFoldView)
+            {
+                if (self.pageNumber+1<[self.cachedImages count])
+                {
+                    return self.cachedImages[self.pageNumber+1];
+                }
+                else return nil;
             }
             else return nil;
         }
         else return nil;
     }
-    else return nil;
+    
+    
 }
 
 - (void)multiFoldView:(HCPaperFoldGalleyMultiFoldView*)foldView  cell:(HCPaperFoldGalleryCellView *)cell didGeneratedScreenshot:(UIImage *)screenshot 
@@ -261,9 +278,14 @@
     [self tilePages];
 }
 
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    [self scrollViewDidEndDecelerating:scrollView];
+}
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    self.pageNumber = scrollView.contentOffset.x/scrollView.frame.size.width;
+    _pageNumber = scrollView.contentOffset.x/scrollView.frame.size.width;
     
     CGRect contentViewFrame = [self.contentView frame];
     contentViewFrame.origin.x = scrollView.frame.size.width*self.pageNumber;
@@ -275,6 +297,12 @@
     
     HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
     [page setHidden:NO];
+    
+    if (self.scrollCompletion)
+    {
+        self.scrollCompletion();
+        self.scrollCompletion = nil;
+    }
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -288,6 +316,26 @@
     HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
     [page setHidden:YES];
     
+}
+
+- (void)setPageNumber:(int)pageNumber
+{
+    [self setPageNumber:pageNumber animated:NO];
+}
+
+- (void)setPageNumber:(int)pageNumber animated:(BOOL)animated
+{
+    [self setPageNumber:pageNumber animated:animated completed:^{
+        
+    }];
+}
+
+- (void)setPageNumber:(int)pageNumber animated:(BOOL)animated completed:(void(^)())block
+{
+    self.scrollCompletion = block;
+    [self scrollViewWillBeginDragging:self.scrollView];
+    
+    [self.scrollView scrollRectToVisible:CGRectMake(self.scrollView.frame.size.width*pageNumber, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height) animated:animated];
 }
 
 @end

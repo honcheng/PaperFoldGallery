@@ -19,4 +19,6 @@
 - (id)initWithFrame:(CGRect)frame folds:(int)folds;
 - (void)reloadData;
 - (HCPaperFoldGalleryCellView*)dequeueReusableCellWithIdentifier:(NSString*)identifier;
+- (void)setPageNumber:(int)pageNumber animated:(BOOL)animated;
+- (void)setPageNumber:(int)pageNumber animated:(BOOL)animated completed:(void(^)())block;
 @end

@@ -18,4 +18,6 @@
 
 @protocol HCPaperFoldGalleryViewDatasource <NSObject>
 - (NSInteger)numbeOfItemsInPaperFoldGalleryView:(HCPaperFoldGalleryView*)galleryView;
+@optional
+- (UIImage*)paperFoldGalleryView:(HCPaperFoldGalleryView*)galleryView imageAtPageNumber:(int)pageNumber;
 @end

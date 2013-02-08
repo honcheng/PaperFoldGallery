@@ -14,6 +14,8 @@
 
 @protocol HCPaperFoldGalleryViewDelegate <NSObject>
 - (HCPaperFoldGalleryCellView*)paperFoldGalleryView:(HCPaperFoldGalleryView*)galleryView viewAtPageNumber:(int)pageNumber;
+@optional
+- (void)paperFoldGalleryView:(HCPaperFoldGalleryView*)galleryView didScrollToPageNumber:(int)pageNumber;
 @end
 
 @protocol HCPaperFoldGalleryViewDatasource <NSObject>

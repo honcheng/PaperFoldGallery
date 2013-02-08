@@ -36,6 +36,7 @@
         scrollView.pagingEnabled = YES;
         scrollView.delegate = self;
         scrollView.scrollsToTop = NO;
+        scrollView.showsHorizontalScrollIndicator = NO;
         [self addSubview:scrollView];
         self.scrollView = scrollView;
         
@@ -283,6 +284,12 @@
     [self scrollViewDidEndDecelerating:scrollView];
 }
 
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (!self.allowDraggingBeforeAnimationCompletes)
+        [self.scrollView setScrollEnabled:NO];
+}
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     _pageNumber = scrollView.contentOffset.x/scrollView.frame.size.width;
@@ -303,6 +310,14 @@
         self.scrollCompletion();
         self.scrollCompletion = nil;
     }
+    
+    if ([self.delegate respondsToSelector:@selector(paperFoldGalleryView:didScrollToPageNumber:)])
+    {
+        [self.delegate paperFoldGalleryView:self didScrollToPageNumber:self.pageNumber];
+    }
+    
+    if (!self.allowDraggingBeforeAnimationCompletes)
+        [self.scrollView setScrollEnabled:YES];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView

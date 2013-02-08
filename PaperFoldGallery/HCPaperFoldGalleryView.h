@@ -16,6 +16,11 @@
 @property (nonatomic, weak) id<HCPaperFoldGalleryViewDatasource> datasource;
 @property (nonatomic, assign) int pageNumber;
 @property (nonatomic, assign) BOOL useCacheImages;
+/**
+ * Default NO
+ * When set to YES, paperfold may not appear when new panning starts before the previous animation completes
+ */
+@property (nonatomic, assign) BOOL allowDraggingBeforeAnimationCompletes;
 - (id)initWithFrame:(CGRect)frame folds:(int)folds;
 - (void)reloadData;
 - (HCPaperFoldGalleryCellView*)dequeueReusableCellWithIdentifier:(NSString*)identifier;

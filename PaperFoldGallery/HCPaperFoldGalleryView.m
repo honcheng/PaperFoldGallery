@@ -98,6 +98,7 @@
 		if (page.pageNumber < firstNeededPageIndex || page.pageNumber > lastNeededPageIndex)
 		{
 			[self.recycledPages addObject:page];
+            [page viewDidDisappear];
 			[page removeFromSuperview];
 		}
 	}
@@ -135,7 +136,7 @@
     }
 }
 
-- (HCPaperFoldGalleryCellView*)cellForPageNumber:(int)pageNumber
+- (HCPaperFoldGalleryCellView*)viewAtPageNumber:(int)pageNumber
 {
     return (HCPaperFoldGalleryCellView*)[self.scrollView viewWithTag:TAG_PAGE+pageNumber];
 }
@@ -307,7 +308,8 @@
     [self.centerFoldView setHidden:YES];
     [self.rightFoldView setHidden:YES];
     
-    HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
+//    HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
+    HCPaperFoldGalleryCellView *page = [self viewAtPageNumber:self.pageNumber+1];
     [page setHidden:NO];
     
     if (self.scrollCompletion)
@@ -315,6 +317,8 @@
         self.scrollCompletion();
         self.scrollCompletion = nil;
     }
+    
+    [[self viewAtPageNumber:self.pageNumber] viewDidAppear];
     
     if ([self.delegate respondsToSelector:@selector(paperFoldGalleryView:didScrollToPageNumber:)])
     {

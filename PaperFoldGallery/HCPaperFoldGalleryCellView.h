@@ -12,4 +12,6 @@
 @property (nonatomic, assign) int pageNumber;
 @property (nonatomic, copy) NSString *identifier;
 - (id)initWithIdentifier:(NSString*)identifier;
+- (void)viewDidAppear;
+- (void)viewDidDisappear;
 @end

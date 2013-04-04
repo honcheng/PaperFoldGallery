@@ -135,6 +135,11 @@
     }
 }
 
+- (HCPaperFoldGalleryCellView*)cellForPageNumber:(int)pageNumber
+{
+    return (HCPaperFoldGalleryCellView*)[self.scrollView viewWithTag:TAG_PAGE+pageNumber];
+}
+
 - (BOOL)isDisplayingPageForIndex:(int)index
 {
 	for (HCPaperFoldGalleryCellView *page in self.visiblePages)

@@ -26,4 +26,5 @@
 - (HCPaperFoldGalleryCellView*)dequeueReusableCellWithIdentifier:(NSString*)identifier;
 - (void)setPageNumber:(int)pageNumber animated:(BOOL)animated;
 - (void)setPageNumber:(int)pageNumber animated:(BOOL)animated completed:(void(^)())block;
+- (HCPaperFoldGalleryCellView*)cellForPageNumber:(int)pageNumber;
 @end

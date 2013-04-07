@@ -23,12 +23,12 @@
 
 - (void)viewDidAppear
 {
-    NSLog(@"did appear %i", self.pageNumber);
+
 }
 
 - (void)viewDidDisappear
 {
-    NSLog(@"did disappear %i", self.pageNumber);
+ 
 }
 
 @end

@@ -16,6 +16,8 @@
 @property (nonatomic, strong) NSTimer *animationTimer;
 @property (nonatomic, strong) NSMutableSet *recycledPages, *visiblePages;
 @property (nonatomic, strong) NSMutableArray *cachedImages;
+@property (nonatomic, assign) BOOL isTransitioning;
+@property (nonatomic, assign) CGPoint lastTrackingPoint;
 @property (nonatomic, copy) void (^scrollCompletion)();
 - (void)tilePages;
 @end
@@ -269,6 +271,39 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    if ([self.delegate respondsToSelector:@selector(paperFoldGalleryView:willUnfoldToPageNumber:unfoldDistance:)] ||
+        [self.delegate respondsToSelector:@selector(paperFoldGalleryView:willFoldToPageNumber:foldDistance:)])
+    {
+        if (!self.isTransitioning && !scrollView.isTracking)
+        {
+            self.isTransitioning = YES;
+            if(scrollView.contentOffset.x - self.lastTrackingPoint.x > 0)
+            {
+                // move left, unfolding
+                int n_pages_on_left = floor(scrollView.contentOffset.x / scrollView.frame.size.width);
+                float distance = scrollView.frame.size.width - (scrollView.contentOffset.x - n_pages_on_left*scrollView.frame.size.width);
+                if ([self.delegate respondsToSelector:@selector(paperFoldGalleryView:willUnfoldToPageNumber:unfoldDistance:)])
+                {
+                    [self.delegate paperFoldGalleryView:self willUnfoldToPageNumber:n_pages_on_left+1 unfoldDistance:distance];
+                }
+            }
+            else if(scrollView.contentOffset.x - self.lastTrackingPoint.x < 0)
+            {
+                // move right, folding
+                int n_pages_on_left = floor(scrollView.contentOffset.x / scrollView.frame.size.width);
+                float distance = scrollView.contentOffset.x - n_pages_on_left*scrollView.frame.size.width;
+                if ([self.delegate respondsToSelector:@selector(paperFoldGalleryView:willFoldToPageNumber:foldDistance:)])
+                {
+                    [self.delegate paperFoldGalleryView:self willFoldToPageNumber:n_pages_on_left foldDistance:distance];
+                }
+                
+            }
+            
+        }
+        else self.lastTrackingPoint = scrollView.contentOffset;
+    }
+    
+    
     CGPoint offset = scrollView.contentOffset;
     float x_offset = -1*(offset.x - scrollView.frame.size.width*self.pageNumber);
     [self.rightFoldView unfoldWithParentOffset:x_offset];
@@ -298,6 +333,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
+    _isTransitioning = NO;
     _pageNumber = scrollView.contentOffset.x/scrollView.frame.size.width;
     
     CGRect contentViewFrame = [self.contentView frame];

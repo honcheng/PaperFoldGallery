@@ -15,7 +15,9 @@
 @protocol HCPaperFoldGalleryViewDelegate <NSObject>
 - (HCPaperFoldGalleryCellView*)paperFoldGalleryView:(HCPaperFoldGalleryView*)galleryView viewAtPageNumber:(int)pageNumber;
 @optional
-- (void)paperFoldGalleryView:(HCPaperFoldGalleryView*)galleryView didScrollToPageNumber:(int)pageNumber;
+- (void)paperFoldGalleryView:(HCPaperFoldGalleryView *)galleryView didScrollToPageNumber:(int)pageNumber;
+- (void)paperFoldGalleryView:(HCPaperFoldGalleryView *)galleryView willFoldToPageNumber:(int)pageNumber foldDistance:(float)foldDistance;
+- (void)paperFoldGalleryView:(HCPaperFoldGalleryView *)galleryView willUnfoldToPageNumber:(int)pageNumber unfoldDistance:(float)unfoldDistance;
 @end
 
 @protocol HCPaperFoldGalleryViewDatasource <NSObject>

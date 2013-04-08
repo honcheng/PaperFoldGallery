@@ -277,7 +277,8 @@
         if (!self.isTransitioning && !scrollView.isTracking)
         {
             self.isTransitioning = YES;
-            if(scrollView.contentOffset.x - self.lastTrackingPoint.x > 0)
+            if( (scrollView.contentOffset.x - self.lastTrackingPoint.x > 0)   ||
+               (scrollView.contentOffset.x <0 && self.lastTrackingPoint.x < 0) )
             {
                 // move left, unfolding
                 int n_pages_on_left = floor(scrollView.contentOffset.x / scrollView.frame.size.width);
@@ -287,7 +288,7 @@
                     [self.delegate paperFoldGalleryView:self willUnfoldToPageNumber:n_pages_on_left+1 unfoldDistance:distance];
                 }
             }
-            else if(scrollView.contentOffset.x - self.lastTrackingPoint.x < 0)
+            else if( (scrollView.contentOffset.x - self.lastTrackingPoint.x < 0))
             {
                 // move right, folding
                 int n_pages_on_left = floor(scrollView.contentOffset.x / scrollView.frame.size.width);
@@ -296,8 +297,9 @@
                 {
                     [self.delegate paperFoldGalleryView:self willFoldToPageNumber:n_pages_on_left foldDistance:distance];
                 }
-                
             }
+            
+            
             
         }
         else self.lastTrackingPoint = scrollView.contentOffset;

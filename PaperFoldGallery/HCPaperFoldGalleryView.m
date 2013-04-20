@@ -422,6 +422,11 @@
     [self scrollViewWillBeginDragging:self.scrollView];
     
     [self.scrollView scrollRectToVisible:CGRectMake(self.scrollView.frame.size.width*pageNumber, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height) animated:animated];
+    double delayInSeconds = 0.35;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        self.isTransitioning = NO;
+    });
 }
 
 @end

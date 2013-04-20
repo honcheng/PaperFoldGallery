@@ -67,6 +67,16 @@
 
 - (void)reloadData
 {
+    _cachedImages = nil;
+    
+    for (UIView *view in self.scrollView.subviews)
+    {
+        if ([view isKindOfClass:[HCPaperFoldGalleryCellView class]])
+        {
+            [view removeFromSuperview];
+        }
+    }
+    
     int numberOfPages = [self.datasource numbeOfItemsInPaperFoldGalleryView:self];
     CGSize contentSize = CGSizeMake(self.frame.size.width*numberOfPages, self.frame.size.height);
     [self.scrollView setContentSize:contentSize];
@@ -119,13 +129,27 @@
 			[page setPageNumber:index];
 
             [self.scrollView insertSubview:page belowSubview:self.contentView];
-			//[self.scrollView addSubview:page];
 			[self.visiblePages addObject:page];
 		}
         else
         {
             HCPaperFoldGalleryCellView *page = (HCPaperFoldGalleryCellView*)[self.scrollView viewWithTag:(TAG_PAGE+index)];
-            [page setTag:TAG_PAGE+index];
+
+            // this page may not exists after reloadData is called
+            if (!page)
+            {
+                HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:index];
+                int x = self.frame.size.width*index;
+                CGRect pageFrame = CGRectMake(x,0,self.scrollView.frame.size.width,self.scrollView.frame.size.height);
+                
+                [page setFrame:pageFrame];
+                [page setTag:TAG_PAGE+index];
+                [page setPageNumber:index];
+                
+                [self.scrollView insertSubview:page belowSubview:self.contentView];
+                [self.visiblePages addObject:page];
+            }
+            else [page setTag:TAG_PAGE+index];
         }
 	}
     if (numberOfItems==1)

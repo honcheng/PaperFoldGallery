@@ -54,6 +54,7 @@
         self.centerFoldView.userInteractionEnabled = NO;
         [self.contentView addSubview:self.centerFoldView];
         self.centerFoldView.backgroundColor = self.backgroundColor;
+        self.centerFoldView.hidden = YES;
 
         HCPaperFoldGalleyMultiFoldView *rightFoldView = [[HCPaperFoldGalleyMultiFoldView alloc] initWithFrame:CGRectMake(frame.size.width, 0, frame.size.width, frame.size.height) foldDirection:FoldDirectionHorizontalRightToLeft folds:folds pullFactor:0.9];
         self.rightFoldView = rightFoldView;
@@ -61,6 +62,7 @@
         self.rightFoldView.userInteractionEnabled = NO;
         [self.contentView addSubview:self.rightFoldView];
         self.rightFoldView.backgroundColor = self.backgroundColor;
+        self.rightFoldView.hidden = YES;
     }
     return self;
 }

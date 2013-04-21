@@ -166,7 +166,13 @@
 
 - (HCPaperFoldGalleryCellView*)viewAtPageNumber:(int)pageNumber
 {
-    return (HCPaperFoldGalleryCellView*)[self.scrollView viewWithTag:TAG_PAGE+pageNumber];
+    HCPaperFoldGalleryCellView *view = (HCPaperFoldGalleryCellView*)[self.scrollView viewWithTag:TAG_PAGE+pageNumber];
+    if (!view)
+    {
+        view = [self.delegate paperFoldGalleryView:self viewAtPageNumber:pageNumber];
+    }
+
+    return view;
 }
 
 - (BOOL)isDisplayingPageForIndex:(int)index
@@ -216,7 +222,8 @@
 {
     if (foldView==self.centerFoldView)
     {
-        HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber];
+//        HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber];
+        HCPaperFoldGalleryCellView *page = [self viewAtPageNumber:self.pageNumber];
         [page setTag:TAG_PAGE+self.pageNumber];
         int x = self.frame.size.width*self.pageNumber;
         CGRect pageFrame = CGRectMake(x,0,self.scrollView.frame.size.width,self.scrollView.frame.size.height);
@@ -225,7 +232,8 @@
     }
     else if (foldView==self.rightFoldView)
     {
-        HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
+//        HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
+        HCPaperFoldGalleryCellView *page = [self viewAtPageNumber:self.pageNumber+1];
         [page setTag:TAG_PAGE+self.pageNumber+1];
         int x = self.frame.size.width*(self.pageNumber+1);
         CGRect pageFrame = CGRectMake(x,0,self.scrollView.frame.size.width,self.scrollView.frame.size.height);
@@ -401,7 +409,8 @@
     [self.centerFoldView reloadScreenshot];
     [self.rightFoldView reloadScreenshot];
 
-    HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
+//    HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
+    HCPaperFoldGalleryCellView *page = [self viewAtPageNumber:self.pageNumber+1];
     [page setHidden:YES];
     
 }

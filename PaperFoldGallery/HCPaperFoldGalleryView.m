@@ -71,26 +71,31 @@
 {
     _cachedImages = nil;
     
-    for (UIView *view in self.scrollView.subviews)
-    {
-        if ([view isKindOfClass:[HCPaperFoldGalleryCellView class]])
-        {
-            [view removeFromSuperview];
-        }
-    }
+//    for (UIView *view in self.scrollView.subviews)
+//    {
+//        if ([view isKindOfClass:[HCPaperFoldGalleryCellView class]])
+//        {
+//            [self.recycledPages addObject:view];
+//            [view removeFromSuperview];
+//        }
+//    }
     
     int numberOfPages = [self.datasource numbeOfItemsInPaperFoldGalleryView:self];
     CGSize contentSize = CGSizeMake(self.frame.size.width*numberOfPages, self.frame.size.height);
     [self.scrollView setContentSize:contentSize];
     
-    UIView *centerPageContentView = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber];
+    [self tilePages];
+    
+//    UIView *centerPageContentView = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber];
+    UIView *centerPageContentView = [self viewAtPageNumber:self.pageNumber];
     [self.centerFoldView setContent:centerPageContentView];
     [self.centerFoldView unfoldWithParentOffset:-self.frame.size.width];
     
-    UIView *rightPageContentView = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
+//    UIView *rightPageContentView = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber+1];
+    UIView *rightPageContentView = [self viewAtPageNumber:self.pageNumber+1];
     [self.rightFoldView setContent:rightPageContentView];
     
-    [self tilePages];
+    
     [self.scrollView scrollRectToVisible:CGRectMake(self.pageNumber*self.scrollView.frame.size.width,0,10,10) animated:NO];
 }
 
@@ -120,6 +125,7 @@
     
     for (int index=firstNeededPageIndex; index<=lastNeededPageIndex; index++)
 	{
+
 		if (![self isDisplayingPageForIndex:index])
 		{
 			HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:index];
@@ -177,11 +183,16 @@
 
 - (BOOL)isDisplayingPageForIndex:(int)index
 {
+    BOOL isDisplayingPage = NO;
 	for (HCPaperFoldGalleryCellView *page in self.visiblePages)
 	{
-		if (page.pageNumber==index) return YES;
+		if (page.pageNumber==index)
+        {
+            isDisplayingPage = YES;
+            break;
+        }
 	}
-	return NO;
+	return isDisplayingPage;
 }
 
 - (HCPaperFoldGalleryCellView*)dequeueReusableCellWithIdentifier:(NSString*)identifier

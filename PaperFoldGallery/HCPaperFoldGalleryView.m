@@ -84,7 +84,7 @@
     CGSize contentSize = CGSizeMake(self.frame.size.width*numberOfPages, self.frame.size.height);
     [self.scrollView setContentSize:contentSize];
     
-    [self tilePages];
+    
     
 //    UIView *centerPageContentView = [self.delegate paperFoldGalleryView:self viewAtPageNumber:self.pageNumber];
     UIView *centerPageContentView = [self viewAtPageNumber:self.pageNumber];
@@ -95,6 +95,7 @@
     UIView *rightPageContentView = [self viewAtPageNumber:self.pageNumber+1];
     [self.rightFoldView setContent:rightPageContentView];
     
+    [self tilePages];
     
     [self.scrollView scrollRectToVisible:CGRectMake(self.pageNumber*self.scrollView.frame.size.width,0,10,10) animated:NO];
 }
@@ -142,22 +143,22 @@
         else
         {
             HCPaperFoldGalleryCellView *page = (HCPaperFoldGalleryCellView*)[self.scrollView viewWithTag:(TAG_PAGE+index)];
-
+            [page setTag:TAG_PAGE+index];
             // this page may not exists after reloadData is called
-            if (!page)
-            {
-                HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:index];
-                int x = self.frame.size.width*index;
-                CGRect pageFrame = CGRectMake(x,0,self.scrollView.frame.size.width,self.scrollView.frame.size.height);
-                
-                [page setFrame:pageFrame];
-                [page setTag:TAG_PAGE+index];
-                [page setPageNumber:index];
-                
-                [self.scrollView insertSubview:page belowSubview:self.contentView];
-                [self.visiblePages addObject:page];
-            }
-            else [page setTag:TAG_PAGE+index];
+//            if (!page)
+//            {
+//                HCPaperFoldGalleryCellView *page = [self.delegate paperFoldGalleryView:self viewAtPageNumber:index];
+//                int x = self.frame.size.width*index;
+//                CGRect pageFrame = CGRectMake(x,0,self.scrollView.frame.size.width,self.scrollView.frame.size.height);
+//                
+//                [page setFrame:pageFrame];
+//                [page setTag:TAG_PAGE+index];
+//                [page setPageNumber:index];
+//                
+//                [self.scrollView insertSubview:page belowSubview:self.contentView];
+//                [self.visiblePages addObject:page];
+//            }
+//            else [page setTag:TAG_PAGE+index];
         }
 	}
     if (numberOfItems==1)

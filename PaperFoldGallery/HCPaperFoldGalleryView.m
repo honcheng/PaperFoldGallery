@@ -17,6 +17,11 @@
 @property (nonatomic, strong) NSMutableSet *recycledPages, *visiblePages;
 @property (nonatomic, strong) NSMutableArray *cachedImages;
 @property (nonatomic, assign) BOOL isTransitioning;
+/**
+ * isAnimating 
+ * to setPageNumber:animated:
+ */
+@property (nonatomic, assign) BOOL isAnimating;
 @property (nonatomic, assign) CGPoint lastTrackingPoint;
 @property (nonatomic, copy) void (^scrollCompletion)();
 - (void)tilePages;
@@ -333,6 +338,10 @@
                 {
                     [self.delegate paperFoldGalleryView:self willUnfoldToPageNumber:n_pages_on_left+1 unfoldDistance:distance];
                 }
+                else
+                {
+                    
+                }
             }
             else if( (scrollView.contentOffset.x - self.lastTrackingPoint.x < 0))
             {
@@ -350,7 +359,6 @@
         }
         else self.lastTrackingPoint = scrollView.contentOffset;
     }
-    
     
     CGPoint offset = scrollView.contentOffset;
     float x_offset = -1*(offset.x - scrollView.frame.size.width*self.pageNumber);
@@ -434,9 +442,21 @@
 
 - (void)setPageNumber:(int)pageNumber animated:(BOOL)animated
 {
-    [self setPageNumber:pageNumber animated:animated completed:^{
-        
-    }];
+    if (!_isAnimating)
+    {
+        _isAnimating = YES;
+//        self.userInteractionEnabled = NO;
+        __weak HCPaperFoldGalleryView *weakSelf = self;
+        [self setPageNumber:pageNumber animated:animated completed:^{
+            double delayInSeconds = 0.2;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                weakSelf.isAnimating = NO;
+//                weakSelf.userInteractionEnabled = YES;
+            });
+           
+        }];
+    }
 }
 
 - (void)setPageNumber:(int)pageNumber animated:(BOOL)animated completed:(void(^)())block
@@ -450,6 +470,13 @@
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         self.isTransitioning = NO;
     });
+    
+    if (!animated)
+    {
+        _pageNumber = pageNumber;
+        [self scrollViewDidEndDecelerating:self.scrollView];
+        self.lastTrackingPoint = CGPointMake(self.scrollView.frame.size.width*_pageNumber,0);
+    }
 }
 
 @end

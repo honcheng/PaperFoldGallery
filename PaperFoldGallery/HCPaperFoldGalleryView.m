@@ -16,7 +16,12 @@
 @property (nonatomic, strong) NSTimer *animationTimer;
 @property (nonatomic, strong) NSMutableSet *recycledPages, *visiblePages;
 @property (nonatomic, strong) NSMutableArray *cachedImages;
-@property (nonatomic, assign) BOOL isTransitioning, isBouncing;
+@property (nonatomic, assign) BOOL isTransitioning;
+/**
+ * isBouncing - if YES, the view is animating to bounce slightly
+ * hasBouncingAnimatingStarted - set to YES when scrollViewDidScroll is called the first time
+ */
+@property (nonatomic, assign) BOOL isBouncing, hasBouncingAnimatingStarted;
 /**
  * isAnimating 
  * to setPageNumber:animated:
@@ -107,10 +112,10 @@
 
 - (void)bouncesToHintNextPage
 {
-    if (![self.scrollView isTracking] && self.pageNumber==0)
+    if (![self.scrollView isTracking] && self.pageNumber==0 && !self.isTransitioning)
     {
-        self.lastTrackingPoint = [self.scrollView contentOffset];
         _isBouncing = YES;
+        
         CGPoint offset = [self.scrollView contentOffset];
         offset.x += PAPERFOLD_GALLERY_VIEW_BOUNCE_DISTANCE;
         [self.scrollView setContentOffset:offset animated:YES];
@@ -335,7 +340,24 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if ([self.delegate respondsToSelector:@selector(paperFoldGalleryView:willUnfoldToPageNumber:unfoldDistance:)] ||
+    if (_isBouncing)
+    {
+        if (!_hasBouncingAnimatingStarted)
+        {
+            _hasBouncingAnimatingStarted = YES;
+            _isTransitioning = YES;
+            
+            // move right, folding
+            int n_pages_on_left = floor(scrollView.contentOffset.x / scrollView.frame.size.width);
+            float distance = scrollView.contentOffset.x - n_pages_on_left*scrollView.frame.size.width;
+            if ([self.delegate respondsToSelector:@selector(paperFoldGalleryView:willFoldToPageNumber:foldDistance:)])
+            {
+                [self.delegate paperFoldGalleryView:self willFoldToPageNumber:n_pages_on_left foldDistance:distance];
+            }
+        }
+        
+    }
+    else if ([self.delegate respondsToSelector:@selector(paperFoldGalleryView:willUnfoldToPageNumber:unfoldDistance:)] ||
         [self.delegate respondsToSelector:@selector(paperFoldGalleryView:willFoldToPageNumber:foldDistance:)])
     {
         if (!self.isTransitioning && !scrollView.isTracking)
@@ -367,7 +389,10 @@
                 }
             }
         }
-        else self.lastTrackingPoint = scrollView.contentOffset;
+        else
+        {
+            self.lastTrackingPoint = scrollView.contentOffset;
+        }
     }
     
     CGPoint offset = scrollView.contentOffset;
@@ -402,6 +427,7 @@
     if (_isBouncing)
     {
         _isBouncing = NO;
+        _hasBouncingAnimatingStarted = NO;
         CGPoint offset = [self.scrollView contentOffset];
         offset.x -= PAPERFOLD_GALLERY_VIEW_BOUNCE_DISTANCE;
         [self.scrollView setContentOffset:offset animated:YES];

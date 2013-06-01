@@ -11,7 +11,7 @@
 #import "HCPaperFoldGalleyMultiFoldView.h"
 #import "HCPaperFoldGalleryCellView.h"
 
-#define PAPERFOLD_GALLERY_VIEW_BOUNCE_DISTANCE 45.0
+#define PAPERFOLD_GALLERY_VIEW_BOUNCE_DISTANCE 30.0
 
 @interface HCPaperFoldGalleryView : UIView <HCPaperFoldGalleyMultiFoldViewDelegate, UIScrollViewDelegate>
 @property (nonatomic, weak) id<HCPaperFoldGalleryViewDelegate> delegate;

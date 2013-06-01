@@ -16,7 +16,7 @@
 @property (nonatomic, strong) NSTimer *animationTimer;
 @property (nonatomic, strong) NSMutableSet *recycledPages, *visiblePages;
 @property (nonatomic, strong) NSMutableArray *cachedImages;
-@property (nonatomic, assign) BOOL isTransitioning;
+@property (nonatomic, assign) BOOL isTransitioning, isBouncing;
 /**
  * isAnimating 
  * to setPageNumber:animated:
@@ -103,6 +103,19 @@
     [self tilePages];
     
     [self.scrollView scrollRectToVisible:CGRectMake(self.pageNumber*self.scrollView.frame.size.width,0,10,10) animated:NO];
+}
+
+- (void)bouncesToHintNextPage
+{
+    if (![self.scrollView isTracking] && self.pageNumber==0)
+    {
+        self.lastTrackingPoint = [self.scrollView contentOffset];
+        _isBouncing = YES;
+        CGPoint offset = [self.scrollView contentOffset];
+        offset.x += PAPERFOLD_GALLERY_VIEW_BOUNCE_DISTANCE;
+        [self.scrollView setContentOffset:offset animated:YES];
+    }
+    
 }
 
 #pragma mark scroll view data
@@ -353,9 +366,6 @@
                     [self.delegate paperFoldGalleryView:self willFoldToPageNumber:n_pages_on_left foldDistance:distance];
                 }
             }
-            
-            
-            
         }
         else self.lastTrackingPoint = scrollView.contentOffset;
     }
@@ -389,6 +399,15 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
+    if (_isBouncing)
+    {
+        _isBouncing = NO;
+        CGPoint offset = [self.scrollView contentOffset];
+        offset.x -= PAPERFOLD_GALLERY_VIEW_BOUNCE_DISTANCE;
+        [self.scrollView setContentOffset:offset animated:YES];
+        return;
+    }
+    
     _isTransitioning = NO;
     _pageNumber = scrollView.contentOffset.x/scrollView.frame.size.width;
     

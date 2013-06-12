@@ -1,9 +1,11 @@
 PaperFoldGallery 
 ================
 
-PaperFoldGallery displays multiple views in a paginated UIScrollView, but uses PaperFold library to animate in the next view. 
+PaperFoldGallery displays multiple views in a paginated UIScrollView, but uses PaperFold library to animate to the next view. 
 
-<img width=150 src="https://github.com/honcheng/PaperFoldGallery/raw/master/Screenshots/dispatch-1.PNG"/> <img width=150 src="https://github.com/honcheng/PaperFoldGallery/raw/master/Screenshots/dispatch-2.PNG"/>
+<img src="https://github.com/honcheng/PaperFoldGallery/raw/master/Screenshots/dispatch-1.PNG"/>   <img  src="https://github.com/honcheng/PaperFoldGallery/raw/master/Screenshots/dispatch-2.PNG"/>
+
+PaperFoldGallery is used in the Walkthrough pages of [Dispatch: Action-Based Email](https://itunes.apple.com/us/app/dispatch-action-based-email/id642022747?mt=8) App. 
 
 <img width=300 src="https://github.com/honcheng/PaperFoldGallery/raw/master/Screenshots/demo.gif"/>
 
